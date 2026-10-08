@@ -1,0 +1,621 @@
+.root {
+    -fx-background-color: #06151d;
+    -fx-font-family: "Segoe UI";
+    -fx-font-smoothing-type: lcd;
+}
+
+/* =========================================================
+   MAIN PLAYER
+   ========================================================= */
+
+.player-panel {
+    -fx-background-color:
+        linear-gradient(
+            to bottom right,
+            #071a24,
+            #06131b,
+            #041017
+        );
+
+    -fx-padding: 26px 28px;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.app-title {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+
+    -fx-text-fill: #eaffff;
+
+    -fx-effect:
+        dropshadow(
+            gaussian,
+            rgba(0, 229, 255, 0.35),
+            15,
+            0.25,
+            0,
+            0
+        );
+}
+
+.current-file {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+
+    -fx-text-fill: #64f4ff;
+
+    -fx-padding: 5px 14px;
+}
+
+
+/* =========================================================
+   MEDIA AREA
+   ========================================================= */
+
+.media-area {
+    -fx-background-color: #02080c;
+
+    -fx-border-color: #0ce6e6;
+
+    -fx-border-width: 1.5px;
+
+    -fx-border-radius: 18px;
+
+    -fx-background-radius: 18px;
+
+    -fx-alignment: center;
+
+    -fx-min-width: 0;
+    -fx-min-height: 0;
+
+    -fx-effect:
+        dropshadow(
+            gaussian,
+            rgba(0, 240, 255, 0.18),
+            22,
+            0.20,
+            0,
+            0
+        );
+}
+
+
+/*
+ * MediaView
+ *
+ * The Java code controls the actual size.
+ */
+
+.media-view {
+    -fx-background-color: #000000;
+}
+
+
+/* =========================================================
+   SONG ARTWORK
+   ========================================================= */
+
+.artwork {
+    -fx-effect:
+        dropshadow(
+            gaussian,
+            rgba(0, 238, 255, 0.35),
+            30,
+            0.25,
+            0,
+            0
+        );
+}
+
+
+/*
+ * Text displayed when artwork.jpg/png does not exist.
+ */
+
+.artwork-placeholder {
+    -fx-font-size: 21px;
+
+    -fx-font-weight: bold;
+
+    -fx-text-fill: #3b6872;
+
+    -fx-letter-spacing: 2px;
+}
+
+
+/* =========================================================
+   PROGRESS BAR
+   ========================================================= */
+
+.progress-slider {
+    -fx-padding: 4px 0;
+}
+
+.progress-slider .track {
+    -fx-background-color: #17343e;
+
+    -fx-background-radius: 10px;
+
+    -fx-pref-height: 5px;
+}
+
+.progress-slider .thumb {
+    -fx-background-color: #12e6e6;
+
+    -fx-background-radius: 10px;
+
+    -fx-pref-width: 13px;
+    -fx-pref-height: 13px;
+
+    -fx-effect:
+        dropshadow(
+            gaussian,
+            rgba(0, 238, 255, 0.65),
+            10,
+            0.3,
+            0,
+            0
+        );
+}
+
+
+/* =========================================================
+   TIME
+   ========================================================= */
+
+.time-label {
+    -fx-text-fill: #8aa9b1;
+
+    -fx-font-size: 12px;
+
+    -fx-font-weight: bold;
+}
+
+
+/* =========================================================
+   CONTROL BAR
+   ========================================================= */
+
+.control-bar {
+    -fx-padding: 6px 0 2px 0;
+    -fx-alignment: center;
+}
+
+
+/* Main controls */
+
+.control-button {
+    -fx-background-color: rgba(8, 28, 52, 0.96);
+    -fx-text-fill: #c9f7ff;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 999px;
+    -fx-border-color: #2cbeff;
+    -fx-border-width: 2px;
+    -fx-border-radius: 999px;
+    -fx-min-width: 50px;
+    -fx-pref-width: 50px;
+    -fx-min-height: 50px;
+    -fx-pref-height: 50px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0, 123, 255, 0.72), 18, 0.35, 0, 0);
+}
+
+
+/* Hover */
+
+.control-button:hover {
+    -fx-background-color: #0b3b73;
+    -fx-border-color: #71dcff;
+
+    -fx-text-fill: #ffffff;
+
+    -fx-effect:
+        dropshadow(
+            gaussian,
+            rgba(0, 153, 255, 0.78),
+            20,
+            0.35,
+            0,
+            0
+        );
+}
+
+
+/* Press */
+
+.control-button:pressed {
+    -fx-background-color: #0a242d;
+
+    -fx-translate-y: 1px;
+}
+
+
+/* Play button */
+
+.play-button {
+    -fx-background-color:
+        linear-gradient(
+            to bottom right,
+            #08d9d9,
+            #00a9c7
+        );
+
+    -fx-text-fill: #00151b;
+
+    -fx-font-size: 18px;
+
+    -fx-min-width: 62px;
+    -fx-pref-width: 62px;
+    -fx-min-height: 62px;
+    -fx-pref-height: 62px;
+    -fx-background-radius: 999px;
+
+    -fx-border-color: #54ffff;
+
+    -fx-border-radius: 999px;
+
+    -fx-effect:
+        dropshadow(
+            gaussian,
+            rgba(0, 139, 255, 0.90),
+            24,
+            0.45,
+            0,
+            0
+        );
+}
+
+.play-button:hover {
+    -fx-background-color:
+        linear-gradient(
+            to bottom right,
+            #35ffff,
+            #00c9dc
+        );
+}
+
+
+/* Stop */
+
+.stop-button {
+    -fx-text-fill: #ff6b75;
+}
+
+.stop-button:hover {
+    -fx-border-color: #ff6b75;
+    -fx-effect:
+        dropshadow(
+            gaussian,
+            rgba(255, 107, 117, 0.58),
+            12,
+            0.25,
+            0,
+            0
+        );
+}
+
+
+/* =========================================================
+   VOLUME
+   ========================================================= */
+
+.volume-bar {
+    -fx-padding: 5px 0 0 0;
+}
+
+.small-button {
+    -fx-background-color: #0d2731;
+
+    -fx-text-fill: #bfeef2;
+
+    -fx-font-size: 15px;
+
+    -fx-font-weight: bold;
+
+    -fx-background-radius: 10px;
+
+    -fx-border-color: #19424d;
+
+    -fx-border-radius: 10px;
+
+    -fx-min-width: 44px;
+
+    -fx-min-height: 38px;
+
+    -fx-cursor: hand;
+}
+
+.small-button:hover {
+    -fx-background-color: #123945;
+
+    -fx-border-color: #0ce6e6;
+}
+
+.volume-bar .track {
+    -fx-background-color: #17343e;
+
+    -fx-background-radius: 8px;
+
+    -fx-pref-height: 5px;
+}
+
+.volume-bar .thumb {
+    -fx-background-color: #12e6e6;
+
+    -fx-background-radius: 10px;
+
+    -fx-pref-width: 12px;
+
+    -fx-pref-height: 12px;
+}
+
+.volume-label {
+    -fx-text-fill: #8aa9b1;
+
+    -fx-font-size: 12px;
+
+    -fx-font-weight: bold;
+
+    -fx-min-width: 75px;
+}
+
+
+/* =========================================================
+   STATUS
+   ========================================================= */
+
+.status-label {
+    -fx-text-fill: #4ddde5;
+
+    -fx-font-size: 11px;
+
+    -fx-font-weight: bold;
+
+    -fx-padding: 3px 0;
+}
+
+
+/* =========================================================
+   PLAYLIST PANEL
+   ========================================================= */
+
+.playlist-panel {
+    -fx-background-color:
+        linear-gradient(
+            to bottom,
+            #071a23,
+            #06151d
+        );
+
+    -fx-border-color: #12343e;
+
+    -fx-border-width: 0 0 0 1px;
+
+    -fx-padding: 22px;
+
+    -fx-effect:
+        dropshadow(
+            gaussian,
+            rgba(0, 0, 0, 0.35),
+            20,
+            0.15,
+            -5,
+            0
+        );
+}
+
+
+.playlist-title {
+    -fx-text-fill: #eaffff;
+
+    -fx-font-size: 20px;
+
+    -fx-font-weight: bold;
+
+    -fx-padding: 0 0 6px 0;
+
+    -fx-effect:
+        dropshadow(
+            gaussian,
+            rgba(0, 229, 255, 0.25),
+            10,
+            0.2,
+            0,
+            0
+        );
+}
+
+
+/* =========================================================
+   PLAYLIST
+   ========================================================= */
+
+.playlist {
+    -fx-background-color: #041017;
+
+    -fx-border-color: #12343e;
+
+    -fx-border-width: 1px;
+
+    -fx-border-radius: 13px;
+
+    -fx-background-radius: 13px;
+
+    -fx-padding: 5px;
+}
+
+
+/* Remove default focus border */
+
+.playlist:focused {
+    -fx-border-color: #0ce6e6;
+}
+
+
+/* Individual item */
+
+.playlist .list-cell {
+    -fx-background-color: transparent;
+
+    -fx-text-fill: #a9c4ca;
+
+    -fx-padding: 13px 11px;
+
+    -fx-font-size: 13px;
+
+    -fx-wrap-text: true;
+    -fx-alignment: center-left;
+    -fx-background-radius: 9px;
+
+    -fx-cursor: hand;
+}
+
+
+/* Hover */
+
+.playlist .list-cell:hover {
+    -fx-background-color: #0b2731;
+
+    -fx-text-fill: #dfffff;
+}
+
+
+/* Selected */
+
+.playlist .list-cell:selected {
+    -fx-background-color:
+        linear-gradient(
+            to right,
+            #0c454e,
+            #0b3039
+        );
+
+    -fx-text-fill: #63f4fa;
+
+    -fx-font-weight: bold;
+
+    -fx-border-color: #0ce6e6;
+
+    -fx-border-width: 0 0 0 3px;
+
+    -fx-border-radius: 2px;
+}
+
+
+/* =========================================================
+   ADD / REMOVE BUTTONS
+   ========================================================= */
+
+.action-button {
+    -fx-background-color: #0c2933;
+
+    -fx-text-fill: #c9f7fa;
+
+    -fx-font-weight: bold;
+
+    -fx-font-size: 12px;
+
+    -fx-padding: 11px 14px;
+
+    -fx-background-radius: 10px;
+
+    -fx-border-color: #194650;
+
+    -fx-border-width: 1px;
+
+    -fx-border-radius: 10px;
+
+    -fx-cursor: hand;
+}
+
+.action-button:hover {
+    -fx-background-color: #10404b;
+
+    -fx-border-color: #0ce6e6;
+
+    -fx-text-fill: white;
+
+    -fx-effect:
+        dropshadow(
+            gaussian,
+            rgba(0, 229, 255, 0.25),
+            10,
+            0.2,
+            0,
+            0
+        );
+}
+
+
+/* =========================================================
+   PLAYLIST KEYBOARD HINT
+   ========================================================= */
+
+.playlist-hint {
+    -fx-text-fill: #557b83;
+
+    -fx-font-size: 10px;
+
+    -fx-line-spacing: 3px;
+
+    -fx-padding: 4px;
+}
+
+
+/* =========================================================
+   SCROLL BAR
+   ========================================================= */
+
+.playlist .scroll-bar:vertical {
+    -fx-background-color: transparent;
+
+    -fx-pref-width: 8px;
+}
+
+.playlist .scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+}
+
+.playlist .scroll-bar:vertical .thumb {
+    -fx-background-color: #18505b;
+
+    -fx-background-radius: 10px;
+}
+
+.playlist .scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #0ce6e6;
+}
+
+
+/* =========================================================
+   RESPONSIVE PLAYER
+   ========================================================= */
+
+
+/* =========================================================
+   ACCESSIBILITY AND INTERACTION
+   ========================================================= */
+
+.control-button:focused,
+.small-button:focused,
+.action-button:focused,
+.playlist:focused {
+    -fx-border-color: #54ffff;
+    -fx-border-width: 1.5px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 229, 255, 0.35), 12, 0.2, 0, 0);
+}
+
+.action-button:pressed,
+.small-button:pressed {
+    -fx-translate-y: 1px;
+    -fx-background-color: #08232c;
+}
+
+.playlist .list-cell:empty {
+    -fx-background-color: transparent;
+}
