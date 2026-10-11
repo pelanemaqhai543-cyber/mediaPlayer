@@ -1,3 +1,4 @@
+
 package com.example.mediaplayer;
 
 import javafx.application.Application;
@@ -14,6 +15,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -44,7 +46,7 @@ public class Main extends Application {
     private final StackPane mediaArea = new StackPane();
 
     private final Label artworkPlaceholder =
-            new Label("♪  SELECT A SONG  ♪");
+            new Label("SELECT A SONG");
 
     private final Label currentFileLabel =
             new Label("No media loaded");
@@ -75,25 +77,75 @@ public class Main extends Application {
     private boolean programmaticSelection = false;
 
     private final Button playPauseButton =
-            new Button("▶");
+            new Button();
 
     private final Button stopButton =
-            new Button("■");
+            new Button();
 
     private final Button previousButton =
-            new Button("⏮");
+            new Button();
 
     private final Button nextButton =
-            new Button("⏭");
+            new Button();
 
     private final Button muteButton =
-            new Button("🔊");
+            new Button();
 
     private final Button addButton =
-            new Button("＋ Add Media");
+            new Button("Add Media");
 
     private final Button removeButton =
-            new Button("− Remove");
+            new Button("Remove");
+
+    
+    private static final String ICON_PLAY = "/icons/play.png";
+    private static final String ICON_PAUSE = "/icons/pause.png";
+    private static final String ICON_STOP = "/icons/stop.png";
+    private static final String ICON_PREVIOUS = "/icons/previous.png";
+    private static final String ICON_NEXT = "/icons/previous.png";
+    private static final String ICON_VOLUME = "/icons/volume.png";
+    private static final String ICON_MUTED = "/icons/mute.png";
+    private static final String ICON_PLUS = "/icons/plus.png";
+    private static final String ICON_REMOVE = "/icons/remove.png";
+
+    private ImageView createIcon(String resourcePath, boolean mirrored) {
+        var resource = getClass().getResource(resourcePath);
+
+       
+        if (resource == null && resourcePath.startsWith("/")) {
+            resource = getClass().getResource(resourcePath.substring(1));
+        }
+
+        if (resource == null) {
+            throw new IllegalStateException(
+                    "Missing icon resource: " + resourcePath
+                            + "\nCopy icons to src/main/resources/icons/"
+            );
+        }
+
+        ImageView icon = new ImageView(new Image(resource.toExternalForm(), true));
+        icon.setFitWidth(22);
+        icon.setFitHeight(22);
+        icon.setPreserveRatio(true);
+        icon.setSmooth(true);
+        icon.setMouseTransparent(true);
+        if (mirrored) {
+            icon.setScaleX(-1);
+        }
+        icon.getStyleClass().add("icon-image");
+        return icon;
+    }
+
+    private void setIcon(Button button, String resourcePath) {
+        ImageView icon = createIcon(resourcePath, button == nextButton);
+        double size = button == playPauseButton
+                ? 24
+                : (button == addButton || button == removeButton ? 17 : 20);
+        icon.setFitWidth(size);
+        icon.setFitHeight(size);
+        button.setGraphic(icon);
+        button.setAccessibleText(button == muteButton ? "Mute or unmute" : button.getAccessibleText());
+    }
 
 
     @Override
@@ -161,6 +213,19 @@ public class Main extends Application {
 
         createMediaArea();
 
+        setIcon(previousButton, ICON_PREVIOUS);
+        setIcon(playPauseButton, ICON_PLAY);
+        setIcon(stopButton, ICON_STOP);
+        setIcon(nextButton, ICON_NEXT);
+        setIcon(muteButton, ICON_VOLUME);
+        setIcon(addButton, ICON_PLUS);
+        setIcon(removeButton, ICON_REMOVE);
+        previousButton.setAccessibleText("Previous track");
+        playPauseButton.setAccessibleText("Play or pause");
+        stopButton.setAccessibleText("Stop playback");
+        nextButton.setAccessibleText("Next track");
+        addButton.setAccessibleText("Add media");
+        removeButton.setAccessibleText("Remove selected media");
 
         progressSlider.setMaxWidth(Double.MAX_VALUE);
 
@@ -280,7 +345,7 @@ public class Main extends Application {
 
         panel.setAlignment(Pos.TOP_CENTER);
 
-        // Keep the transport controls visually separated below the media area.
+       
         VBox.setMargin(controls, new Insets(10, 0, 0, 0));
         VBox.setMargin(volumeBox, new Insets(4, 0, 0, 0));
         VBox.setMargin(statusLabel, new Insets(4, 0, 0, 0));
@@ -323,9 +388,7 @@ public class Main extends Application {
                 .add("media-view");
 
 
-        /*
-         * Artwork scales proportionally to fit the available media area.
-         */
+      
         artworkView.setPreserveRatio(true);
 
         artworkView.setSmooth(true);
@@ -349,10 +412,7 @@ public class Main extends Application {
         );
 
 
-        /*
-         * Automatically resize both video and artwork
-         * whenever the media area changes size.
-         */
+       
         mediaArea.widthProperty().addListener(
                 (obs, oldValue, newValue)
                         -> resizeMediaView()
@@ -365,10 +425,7 @@ public class Main extends Application {
     }
 
 
-    /*
-     * Both MediaView and ImageView use the complete
-     * available width and height.
-     */
+    
     private void resizeMediaView() {
 
         double width =
@@ -480,7 +537,8 @@ public class Main extends Application {
 
         Label hint =
                 new Label(
-                        "A Add   •   R Remove   •   N Next   •   P Previous"
+                        "Space Play/Pause   •   S Stop   •   N Next   •   P Previous\n"
+                                + "↑/↓ Volume   •   M Mute   •   A Add   •   R Remove"
                 );
 
         hint.getStyleClass()
@@ -524,42 +582,27 @@ public class Main extends Application {
             Scene scene
     ) {
 
-        scene.setOnKeyPressed(event -> {
-
-            KeyCode key =
-                    event.getCode();
+        // Use a key-event filter so shortcuts work even when the playlist
+        // or another control currently has keyboard focus.
+        scene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            KeyCode key = event.getCode();
+            boolean handled = true;
 
             switch (key) {
+                case SPACE -> togglePlayPause();
+                case S -> stopMedia();
+                case N -> playNext();
+                case P -> playPrevious();
+                case UP -> changeVolume(5);
+                case DOWN -> changeVolume(-5);
+                case M -> toggleMute();
+                case A -> addMediaFiles();
+                case R -> removeSelectedMedia();
+                default -> handled = false;
+            }
 
-                case SPACE ->
-                        togglePlayPause();
-
-                case S ->
-                        stopMedia();
-
-                case N ->
-                        playNext();
-
-                case P ->
-                        playPrevious();
-
-                case UP ->
-                        changeVolume(5);
-
-                case DOWN ->
-                        changeVolume(-5);
-
-                case M ->
-                        toggleMute();
-
-                case A ->
-                        addMediaFiles();
-
-                case R ->
-                        removeSelectedMedia();
-
-                default -> {
-                }
+            if (handled) {
+                event.consume();
             }
         });
     }
@@ -632,16 +675,22 @@ public class Main extends Application {
         volumeSlider.valueProperty()
                 .addListener(
                         (obs, oldValue, newValue) -> {
+                            double value = newValue.doubleValue();
 
-                            if (
-                                    mediaPlayer != null
-                                            && !muted
-                            ) {
-
-                                mediaPlayer.setVolume(
-                                        newValue.doubleValue()
-                                                / 100.0
-                                );
+                            // Moving the slider is an explicit volume
+                            // change. It also unmutes when raised above zero.
+                            if (value <= 0.5) {
+                                muted = true;
+                                if (mediaPlayer != null) {
+                                    mediaPlayer.setVolume(0);
+                                }
+                                setIcon(muteButton, ICON_MUTED);
+                            } else {
+                                muted = false;
+                                if (mediaPlayer != null) {
+                                    mediaPlayer.setVolume(value / 100.0);
+                                }
+                                setIcon(muteButton, ICON_VOLUME);
                             }
 
                             updateVolumeLabel();
@@ -856,8 +905,9 @@ public class Main extends Application {
 
 
             mediaPlayer.setVolume(
-                    volumeSlider.getValue()
-                            / 100.0
+                    muted
+                            ? 0
+                            : volumeSlider.getValue() / 100.0
             );
 
 
@@ -942,9 +992,7 @@ public class Main extends Application {
                 );
 
 
-                /*
-                 * Resize again when the media becomes ready.
-                 */
+                
                 resizeMediaView();
 
 
@@ -993,9 +1041,7 @@ public class Main extends Application {
 
             mediaPlayer.setOnPlaying(() -> {
 
-                playPauseButton.setText(
-                        "⏸"
-                );
+                setIcon(playPauseButton, ICON_PAUSE);
 
                 statusLabel.setText(
                         "Playing • "
@@ -1006,9 +1052,7 @@ public class Main extends Application {
 
             mediaPlayer.setOnPaused(() -> {
 
-                playPauseButton.setText(
-                        "▶"
-                );
+                setIcon(playPauseButton, ICON_PLAY);
 
                 statusLabel.setText(
                         "Paused • "
@@ -1115,11 +1159,13 @@ public class Main extends Application {
                 mediaPlayer.getStatus()
                         == MediaPlayer.Status.PLAYING
         ) {
-
+            // Update immediately; the onPaused callback confirms the state.
+            setIcon(playPauseButton, ICON_PLAY);
             mediaPlayer.pause();
 
         } else {
-
+            // Update immediately; the onPlaying callback confirms the state.
+            setIcon(playPauseButton, ICON_PAUSE);
             mediaPlayer.play();
         }
     }
@@ -1130,6 +1176,7 @@ public class Main extends Application {
         if (mediaPlayer != null) {
 
             mediaPlayer.stop();
+            setIcon(playPauseButton, ICON_PLAY);
 
             progressSlider.setValue(0);
         }
@@ -1209,7 +1256,7 @@ public class Main extends Application {
 
             muted = false;
 
-            muteButton.setText("🔊");
+            setIcon(muteButton, ICON_VOLUME);
         }
     }
 
@@ -1225,25 +1272,28 @@ public class Main extends Application {
         if (!muted) {
 
             previousVolume =
-                    volumeSlider.getValue();
+                    volumeSlider.getValue() <= 0
+                            ? 70
+                            : volumeSlider.getValue();
 
-            volumeSlider.setValue(0);
-
+            // Set the state before changing the slider so the listener cannot
+            // briefly restore sound during the mute operation.
             muted = true;
-
-            muteButton.setText("🔇");
+            volumeSlider.setValue(0);
+            mediaPlayer.setVolume(0);
+            setIcon(muteButton, ICON_MUTED);
 
         } else {
 
-            volumeSlider.setValue(
+            double restoredVolume =
                     previousVolume <= 0
                             ? 70
-                            : previousVolume
-            );
+                            : previousVolume;
 
             muted = false;
-
-            muteButton.setText("🔊");
+            volumeSlider.setValue(restoredVolume);
+            mediaPlayer.setVolume(restoredVolume / 100.0);
+            setIcon(muteButton, ICON_VOLUME);
         }
     }
 
@@ -1440,4 +1490,5 @@ public class Main extends Application {
 
         launch(args);
     }
+
 }
