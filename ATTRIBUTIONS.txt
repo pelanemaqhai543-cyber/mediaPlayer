@@ -1,0 +1,29 @@
+NEON MEDIA PLAYER — ICON ATTRIBUTIONS
+=====================================
+
+The following free icon assets are bundled from Flaticon. Free use requires
+attribution to the respective creators according to the Flaticon license.
+
+Pause/play icons created by Khoirul Huda:
+https://www.flaticon.com/free-icons/pause-play
+
+Pause button icons created by Hilmy Abiyyu A.:
+https://www.flaticon.com/free-icons/pause-button
+
+Stop button icons created by Hilmy Abiyyu A.:
+https://www.flaticon.com/free-icons/stop-button
+
+Previous icons created by little_dipper_studio:
+https://www.flaticon.com/free-icons/previous
+
+Mute icons created by meaicon:
+https://www.flaticon.com/free-icons/mute
+
+Plus sign icons created by riajulislam:
+https://www.flaticon.com/free-icons/plus-sign
+
+Equis/close icons created by Job Moon:
+https://www.flaticon.com/free-icons/equis
+
+The local PNG files are stored in the icons/ directory and are used by Main.java.
+Do not remove this attribution file when submitting the project.
